@@ -1,0 +1,121 @@
+﻿@using Webmedicas.Models;
+@{
+    ViewBag.Title = "EditarPaciente";
+    var paciente = (PacienteDTO)ViewBag.Paciente;
+}
+
+
+<div style="font-family: 'Verdana';">
+    <div class="row">
+        <div class="col-xs-12 ">
+            <div class="col-xs-12 col-md-5">
+                <h2>Editar Paciente</h2>
+                <ol class="breadcrumb" style="background-color:white">
+                    <li><a href="@Url.Action("index", "Home" , new { area="" })">Home</a></li>
+                    <li class="active"><strong>Editar</strong></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading h4 " style="margin:0px; " id="Notificacion">
+                        ActualizarPaciente
+                    </div>
+                    <div class="panel-body" style="padding-left:0px; padding-right:0px">
+                        <div class="col-lg-12">
+                            <form id="actualizarP">
+                                <div class="col-lg-6 text-center">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 text-left">Paciente: </label>
+                                        <input class="form-control " style="width:100%" type="text" name="NombrePaciente" id="NombrePaciente" value="@paciente.NombrePaciente" required>
+                                        <input type="hidden" class="form-control" name="IdPaciente" id="IdPaciente" value="@paciente.IdPaciente" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5 text-left" >Fecha de nacimiento: </label>
+                                        <input class="form-control" type="date" name="FechaNacimiento" id="FechaNacimiento" value="@paciente.FechaNacimiento.ToString("yyyy-MM-dd")" placeholder="Fecha de nacimiento" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 text-left">Genero: </label>
+                                        <input class="form-control " type="text" name="Sexo" id="Sexo" value="@paciente.Sexo" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 text-left">DPI: </label>
+                                        <input class="form-control " type="text" name="DPI" id="DPI" value="@paciente.DPI" placeholder="Eje: 2052853760101" required>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="submit" onclick="ActualizarPaciente(event)" class="btn btn-primary">Actualizar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    function mapearCamposJson(form) {
+
+        var result = {};
+
+        $.map($(form).serializeArray(),
+            function (el) {
+                mapFormProperty(result, el);
+            });
+        return result;
+    }
+    function mapFormProperty(form, property) {
+        form[property.name] = property.value;
+    }
+
+    function ActualizarPaciente(evt) {
+
+        evt.preventDefault();
+        
+        var NewObject = mapearCamposJson($('#actualizarP'));
+        console.info(NewObject);
+
+         $.ajax({
+            url: '@Url.Action("ActualizarPaciente", "ControlPaciente", new { })',
+            data: { "act": JSON.stringify(NewObject) },
+            type: "POST",
+            dataType: "json",
+             success: function (result) {
+                 console.log(result);
+                 if (result.Success === true) {
+                     toastr.success(result.Message);
+                     window.location.reload();
+                 } else {
+                     $("#Notificacion").html("Registro Actualizado");
+                     $("#Notificacion").css('background-color', '#00c206');
+                     //toastr.warning('Alerta:'+result.Message);
+                     return;
+                 }
+            },
+             error: function (jqXHR, textStatus, error) {
+                 $("#Notificacion").html("No Actualizado");
+                 $("#Notificacion").css('background-color', '#FF4000');
+                 //alert("Lo sentimos ocurrio una excepcion");
+                //console.log(error + ":" + textStatus + ":" + jqXHR.responseText);
+            }
+         });
+
+        return;
+
+
+    }
+</script>
