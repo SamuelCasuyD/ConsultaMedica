@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Webmedicas.Models
 {
@@ -13,6 +10,6 @@ namespace Webmedicas.Models
         public string Especialidad { get; set; }
         public string Sexo { get; set; }
         public DateTime FechaNacimiento { get; set; }
-        
+        public DateTime FechaCreacion { get; set; }
     }
 }

@@ -199,6 +199,7 @@
     <Content Include="Views\ControlPaciente\EditarPaciente.cshtml" />
     <Content Include="Views\ControlMedicos\ListMedicos.cshtml" />
     <Content Include="Views\ControlPaciente\ShowAddAnexo.cshtml" />
+    <Content Include="Views\ControlMedicos\EditarMedico.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

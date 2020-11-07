@@ -65,15 +65,16 @@ namespace Webmedicas.Controllers
                         }
                     }
                 }
-                finally
-                {
-                    connection.Close();
-                }
+                finally { connection.Close(); }
                 return BUSCARDOC;
             }
         }
 
-
+        /// <summary>
+        /// CREAR PACIENTE
+        /// </summary>
+        /// <param name="value">LLEVA LOS DATOS OBTENIDOS DEL CONTROLADOR POR MEDIO DE LA VISTA</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/PacientesAPI/PutUpdatePaciente")]
         public Models.RespuestaDTO PutUpdatePaciente(Models.PacienteDTO value)
@@ -105,14 +106,16 @@ namespace Webmedicas.Controllers
                         respuesta.Mensaje += "Error " + ex.Message;
                     }
                 }
-                finally
-                {
-                    connection.Close();
-                }
+                finally { connection.Close(); }
             }
             return respuesta;
         }
 
+        /// <summary>
+        /// ACTUALIUZAR DATOS POR ID PACIENTE
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/PacientesAPI/UpdatePaciente")]
         public Models.RespuestaDTO UpdatePaciente(Models.PacienteDTO value)
@@ -149,7 +152,6 @@ namespace Webmedicas.Controllers
             }
             return respuesta;
         }
-
 
         /// <summary>
         /// API OBTIENE LOS DATOS DEL PACIENTE
@@ -189,12 +191,13 @@ namespace Webmedicas.Controllers
                 finally { connection.Close(); }
                 return paciente;
             }
-
-
-
         }
 
-
+        /// <summary>
+        /// INACTIVAR AL PACIENTE
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/PacientesAPI/InactivarPaciente")]
         public Models.RespuestaDTO InactivarPaciente(Models.PacienteDTO value)
@@ -227,19 +230,21 @@ namespace Webmedicas.Controllers
             return respuesta;
         }
 
+        /// <summary>
+        /// CREAR REGISTRO DEL ANEXO ALMACENADO EN CARPETA MBConfig
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/PacientesAPI/AgregarAnexo")]
         public Models.RespuestaDTO AgregarAnexo(Models.AnexoDTO value)
         {
             var respuesta = new Models.RespuestaDTO();
-
-            
             var ruta = @"C:\\MBConfig";
             if (!Directory.Exists(ruta))
             {
                 Directory.CreateDirectory(ruta);
             }
-
 
             string FileName = value.NombreArchivo;
             //Agregar en Directorio
@@ -247,7 +252,6 @@ namespace Webmedicas.Controllers
             File.WriteAllBytes(pathNewFile, value.ContentArray);
 
             ///ir a la base de datos a crear el registro
-            ///
             using (SqlConnection connection = new SqlConnection(cnString()))
             using (SqlCommand cmd = new SqlCommand("SP_DatosPacientes", connection))
             {
@@ -257,7 +261,6 @@ namespace Webmedicas.Controllers
                 cmd.Parameters.AddWithValue("param2", pathNewFile);
                 cmd.Parameters.AddWithValue("param3", value.Extencion);
                 cmd.Parameters.AddWithValue("param4", value.NombreArchivo);
-                
 
                 int a = 0;
                 try
@@ -274,15 +277,16 @@ namespace Webmedicas.Controllers
                         respuesta.Mensaje += "Error " + ex.Message;
                     }
                 }
-                finally
-                {
-                    connection.Close();
-                }
+                finally { connection.Close(); }
             }
-
             return respuesta;
         }
 
+        /// <summary>
+        /// LISTAR REGISTORS DE LA TABLA ANEXOS
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("api/PacientesAPI/AnexosPorId/{id}")]
         public IList<Models.AnexoDTO> AnexosPorId(string id)
@@ -316,14 +320,10 @@ namespace Webmedicas.Controllers
                         }
                     }
                 }
-                finally { connection.Close(); }
-                return Anexos;
+                finally { connection.Close(); }                
             }
-
-
-
+            return Anexos;
         }
-
 
     }
 }

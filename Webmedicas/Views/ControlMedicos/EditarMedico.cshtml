@@ -1,8 +1,8 @@
 ﻿@using Webmedicas.Models;
 @{
-    ViewBag.Title = "EditarPaciente";
-    //var paciente = (PacienteDTO)ViewBag.Paciente;
-    var paciente = (ViewBag.Paciente == null) ? new PacienteDTO() : (PacienteDTO)ViewBag.Paciente;
+    ViewBag.Title = "EditarMedico";
+    var Rmedico = (ViewBag.Medico == null) ? new MedicoDTO() : (MedicoDTO)ViewBag.Medico;
+    //var paciente = (Session["DataMedicos"] == null) ? new MedicoDTO() : (MedicoDTO)Session["DataMedicos"];
 }
 
 
@@ -24,38 +24,44 @@
             <div class="col-lg-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading h4 " style="margin:0px; " id="Notificacion">
-                        ActualizarPaciente
+                        Actualizar Medico
                     </div>
                     <div class="panel-body" style="padding-left:0px; padding-right:0px">
                         <div class="col-lg-12">
-                            <form id="actualizarP">
+                            <form id="UpdateMedico">
                                 <div class="col-lg-6 text-center">
                                     <div class="form-group">
-                                        <label class="control-label col-md-3 text-left">Paciente: </label>
-                                        <input class="form-control " style="width:100%" type="text" name="NombrePaciente" id="NombrePaciente" value="@paciente.NombrePaciente" required>
-                                        <input type="hidden" class="form-control" name="IdPaciente" id="IdPaciente" value="@paciente.IdPaciente" />
+                                        <label class="control-label col-md-3 text-left">Medico: </label>
+                                        <input class="form-control " style="width:100%" type="text" name="NombreMedico" id="NombreMedico" value="@Rmedico.NombreMedico" required>
+                                        <input type="hidden" class="form-control" name="IdMedico" id="IdMedico" value="@Rmedico.IdMedico" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 text-left">Especialidad: </label>
+                                        <input class="form-control " type="text" name="Especialidad" id="Especialidad" value="@Rmedico.Especialidad" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="control-label col-md-5 text-left">Fecha de nacimiento: </label>
-                                        <input class="form-control" type="date" name="FechaNacimiento" id="FechaNacimiento" value="@paciente.FechaNacimiento.ToString("yyyy-MM-dd")" placeholder="Fecha de nacimiento" required>
+                                        <input class="form-control" type="date" name="FechaNacimiento" id="FechaNacimiento" value="@Rmedico.FechaNacimiento.ToString("yyyy-MM-dd")" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="control-label col-md-3 text-left">Genero: </label>
-                                        <input class="form-control " type="text" name="Sexo" id="Sexo" value="@paciente.Sexo" required>
+                                        <input class="form-control " type="text" name="Sexo" id="Sexo" value="@Rmedico.Sexo" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="control-label col-md-3 text-left">DPI: </label>
-                                        <input class="form-control " type="text" name="DPI" id="DPI" value="@paciente.DPI" placeholder="Eje: 2052853760101" required>
+                                        <label class="control-label col-md-3 text-left">Colegiado: </label>
+                                        <input class="form-control " type="text" name="Colegiado" id="Colegiado" value="@Rmedico.Colegiado" required>
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" onclick="ActualizarPaciente(event)" class="btn btn-primary">Actualizar</button>
+                                    <button type="submit" onclick="ActualizarMedico(event)" class="btn btn-primary">Actualizar</button>
                                 </div>
                             </form>
                         </div>
@@ -65,15 +71,17 @@
         </div>
 
 
+
         <div class="col-lg-12">
             <div class="row">
                 <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group pull-right">
-                        <a class="btn btn-default" href="@Url.Action("ListPacientes", "ControlPaciente",new { })"> Lista de Medicos</a>
+                    <div class="btn-group pull-right">                        
+                        <a class="btn btn-default" href="@Url.Action("ListMedicos", "ControlMedicos",new { })"> Lista de Medicos</a>
                     </div>
                 </div>
             </div>
         </div>
+
 
     </div>
 </div>
@@ -95,15 +103,15 @@
         form[property.name] = property.value;
     }
 
-    function ActualizarPaciente(evt) {
+    function ActualizarMedico(evt) {
 
         evt.preventDefault();
-        
-        var NewObject = mapearCamposJson($('#actualizarP'));
+
+        var NewObject = mapearCamposJson($('#UpdateMedico'));
         console.info(NewObject);
 
          $.ajax({
-            url: '@Url.Action("ActualizarPaciente", "ControlPaciente", new { })',
+            url: '@Url.Action("ActualizarMedico", "ControlMedicos", new { })',
             data: { "act": JSON.stringify(NewObject) },
             type: "POST",
             dataType: "json",

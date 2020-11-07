@@ -207,10 +207,8 @@ namespace Webmedicas.Controllers
             return RedirectToAction("ListPacientes", "ControlPaciente");
         }
 
-
         public ActionResult ShowAddAnexo(int id)
         {
-
             try
             {
                 using (var client = new HttpClient())
@@ -230,12 +228,9 @@ namespace Webmedicas.Controllers
             {
                 string mensaje = ex.Message;
             }
-
-
             ViewBag.IdPaciente = id;
             return View();
         }
-
 
         [HttpPost]
         public ActionResult AgregarAnexo(FormCollection frm)
@@ -252,14 +247,11 @@ namespace Webmedicas.Controllers
                     var IdPaciente = int.Parse(frm["IdPaciente"]);
                     FileUpload.IdPaciente = IdPaciente;
 
-
                     if (uploadedFile != null && uploadedFile.ContentLength > 0)
                     {
-
                         var newAttchment = new Models.AnexoDTO();
                         byte[] FileByteArray = new byte[uploadedFile.ContentLength];
                         uploadedFile.InputStream.Read(FileByteArray, 0, uploadedFile.ContentLength);
-
 
                         newAttchment.IdPaciente = FileUpload.IdPaciente;
                         //newAttchment.FileName = uploadedFile.FileName;
@@ -267,7 +259,6 @@ namespace Webmedicas.Controllers
                         newAttchment.Extencion = Path.GetExtension(uploadedFile.FileName);
                         newAttchment.ContentArray = FileByteArray;
                         newAttchment.ContentLength = uploadedFile.ContentLength;
-
 
                         //Forma 1 
                         using (var client = new HttpClient())
@@ -310,8 +301,6 @@ namespace Webmedicas.Controllers
             TempData["Mensaje"] = respuesta.Mensaje;
             return Redirect(Request.UrlReferrer.ToString());
         }
-
-
 
     }
 }
