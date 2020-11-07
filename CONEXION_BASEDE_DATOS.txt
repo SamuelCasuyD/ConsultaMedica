@@ -1,0 +1,30 @@
+
+
+
+
+
+DATOS PARA LA CONEXION DE LA BASE DE DATOS SQL SERVER
+
+
+Server=127.0.0.1;Database=NOMBRE_BASEDEDATOS;User Id=sa;Password=Contrasena_del_usuario
+
+
+
+//API CONEXION A BASE DE DATOS
+ private String cnString()
+        {
+            try
+            {
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(@"C:\MBConfig\cfg.txt"))
+                {
+                    String line = sr.ReadToEnd();
+                    return line;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
