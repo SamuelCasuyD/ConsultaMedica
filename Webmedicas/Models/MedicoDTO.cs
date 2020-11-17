@@ -11,5 +11,7 @@ namespace Webmedicas.Models
         public string Sexo { get; set; }
         public DateTime FechaNacimiento { get; set; }
         public DateTime FechaCreacion { get; set; }
+        public bool Eliminado { get; set; } //Muestra si esta activo o inactivo
+        public int Estado { get; set; }
     }
 }

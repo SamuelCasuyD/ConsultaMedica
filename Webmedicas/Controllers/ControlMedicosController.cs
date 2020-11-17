@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Webmedicas.Controllers
@@ -13,7 +11,7 @@ namespace Webmedicas.Controllers
     {
 
         [HttpGet]
-        public ActionResult ListMedicos(string k)
+        public ActionResult ListMedicos()
         {
             try
             {
@@ -53,7 +51,9 @@ namespace Webmedicas.Controllers
             Rmedicos.Especialidad = frm["Especialidad"];
             Rmedicos.Sexo = frm["Sexo"];
             Rmedicos.FechaNacimiento = DateTime.Parse(frm["FechaNacimiento"]);
-            Rmedicos.FechaCreacion = DateTime.Now;            
+            Rmedicos.FechaCreacion = DateTime.Now;
+            Rmedicos.Eliminado = false;
+            Rmedicos.Estado = 1;
             Session["DataMedicos"] = Rmedicos;
 
             if (Request.Form["Crear"] != null)
@@ -85,8 +85,9 @@ namespace Webmedicas.Controllers
                     {
                         TempData["Error"] = "Si";
                         TempData["Mensaje"] = respuesta.Mensaje;
+                        return Redirect(Request.UrlReferrer.ToString());
                     }
-                    return RedirectToAction("ListMedicos", "ControlMedicos");
+                    //return RedirectToAction("ListMedicos", "ControlMedicos");
                 }
             }
             return View();
@@ -157,6 +158,17 @@ namespace Webmedicas.Controllers
             {
                 Respuesta.Mensaje = ex.Message;
             }
+            if (Respuesta.Resultado)
+            {
+                TempData["Confirm"] = "Si";
+                TempData["Mensaje"] = Respuesta.Mensaje;
+                return Json(Respuesta, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                TempData["Error"] = "Si";
+                TempData["Mensaje"] = Respuesta.Mensaje;
+            }
             return Json(Respuesta, JsonRequestBehavior.AllowGet);
         }
 
@@ -167,36 +179,43 @@ namespace Webmedicas.Controllers
         /// <returns></returns>
         public ActionResult InactivarMedico(string id)
         {
-            try
+            var respuesta = new Models.RespuestaDTO();
+            var medico = new Models.MedicoDTO();
+            medico.IdMedico = int.Parse(id);
+
+            using (var client = new HttpClient())
             {
-                var respuesta = new Models.RespuestaDTO();
-                var medico = new Models.MedicoDTO();
-                medico.IdMedico = int.Parse(id);
+                client.BaseAddress = new Uri("http://localhost:62699/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                using (var client = new HttpClient())
+                try
                 {
-                    client.BaseAddress = new Uri("http://localhost:62699/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    try
-                    {
-                        respuesta = client.PostAsJsonAsync("api/MedicosAPI/InactivarMedico", medico)
-                              .Result
-                              .Content.ReadAsAsync<Models.RespuestaDTO>().Result;
-                    }
-                    catch (Exception ex)
-                    {
-                        respuesta.Mensaje += ex.Message.ToString();
-                    }
+                    respuesta = client.PostAsJsonAsync("api/MedicosAPI/InactivarMedico", medico)
+                          .Result
+                          .Content.ReadAsAsync<Models.RespuestaDTO>().Result;
+                }
+                catch (Exception ex)
+                {
+                    respuesta.Mensaje += ex.Message.ToString();
+                }
+                if (respuesta.Resultado)
+                {
+                    Session.Remove("DataMedicos");
+                    TempData["Confirm"] = "Si";
+                    TempData["Mensaje"] = respuesta.Mensaje;
+                    return RedirectToAction("ListMedicos", "ControlMedicos");
+                }
+                else
+                {
+                    TempData["Error"] = "Si";
+                    TempData["Mensaje"] = respuesta.Mensaje;
+                    return Redirect(Request.UrlReferrer.ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                string mensaje = ex.Message;
-            }
-            return RedirectToAction("ListMedicos", "ControlMedicoS");
+            //return View();
         }
 
     }
+
 }

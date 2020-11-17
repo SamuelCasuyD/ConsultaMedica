@@ -8,88 +8,70 @@
 }
 
 <div style="font-family: 'Verdana';">
-    <div class="row">
-        <div class="col-xs-12 ">
-            <div class="col-xs-12 col-md-5">
-                <h2>Control de Pacientes</h2>
-                <ol class="breadcrumb" style="background-color:white">
-                    <li><a href="@Url.Action("index", "Home" , new { area="" })">Home</a></li>
-                    <li class="active"><strong>Pacientes</strong></li>
-                </ol>
-            </div>
-        </div>
-    </div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-white">
+            <li class="breadcrumb-item"><a href="@Url.Action("index", "Home" , new { area="" })">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Crear Paciente</li>
+        </ol>
+    </nav>
 
     <div class="container">
-        <div class="row text-center">
+        <div class="row">
             <div class="col-lg-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading h4 " style="margin:0px; ">
+                <div class="card">
+                    <div class="card-header bg-light mb-3">
                         Crear Paciente
                     </div>
-                    <div class="panel-body" style="padding-left:0px; padding-right:0px">
-                        <div class="col-lg-12">
-                            <form action="@Url.Action("CrearControlPaciente", "ControlPaciente")" method="post">
-                                <div class="col-lg-6 text-center">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3 text-left">Paciente: </label>
-                                        <input class="form-control " style="width:100%" type="text" name="NombrePaciente" id="NombrePaciente" value="@paciente.NombrePaciente" required>
-                                    </div>
+                    <div class="card-body">
+                        <form class="form-row" action="@Url.Action("CrearControlPaciente", "ControlPaciente")" method="post">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Paciente:</label>
+                                    <input class="form-control col" style="width:100%" type="text" name="NombrePaciente" id="NombrePaciente" value="@paciente.NombrePaciente" required>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-5 text-left" >Fecha de nacimiento: </label>
-                                        <input class="form-control" type="date" name="FechaNacimiento" id="FechaNacimiento" value="" placeholder="Fecha de nacimiento" required>
-                                    </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Fecha de nacimiento: </label>
+                                    <input class="form-control col" type="date" name="FechaNacimiento" id="FechaNacimiento" value="" placeholder="Fecha de nacimiento" required>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3 text-left">Genero: </label>
-                                        <input class="form-control " type="text" name="Sexo" id="Sexo" value="@paciente.Sexo" required>
-                                    </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Genero: </label>
+                                    <input class="form-control col" type="text" name="Sexo" id="Sexo" value="@paciente.Sexo" required>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3 text-left">DPI: </label>
-                                        <input class="form-control " type="text" name="DPI" id="DPI" value="@paciente.DPI" placeholder="Eje: 2052853760101" required>
-                                    </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>DPI: </label>
+                                    <input class="form-control col" type="text" name="DPI" id="DPI" value="@paciente.DPI" placeholder="Eje: 2052853760101" required>
                                 </div>
-                                <div>
-                                    <button class="btn btn-primary pull-right" type="submit" id="Crear" name="Crear">
-                                        <i class="fa fa-check fa-lg" aria-hidden="true"></i> Crear
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="col-lg-12 text-right">
+                                <button class="btn btn-outline-info" type="submit" id="Crear" name="Crear">
+                                    <i class="fa fa-check fa-lg" aria-hidden="true"></i> Crear
+                                </button>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-12">
-            <div class="row">
-                <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group pull-right">
-                        <a class="btn btn-default" type="button" href="@Url.Action("EditarPaciente","ControlPaciente",new { })"> Crear Cita</a>
-                        <a class="btn btn-default" href="@Url.Action("EditarPaciente","ControlPaciente",new { })"> Lista de citas</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr class="mt-5 mb-5">
-
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins tooltip-demo">
-                <table class="table table-striped table-hover table-bordered small">
+        <div class="row" style="padding-top: 25px">
+            <div class="col-lg-12">
+                <table class="table table-striped table-sm table-responsive-lg">
                     <thead>
-                        <tr>
+                        <tr class="btn-primary">
                             <th style="text-align:center">#</th>
-                            <th>CODIGO</th>
-                            <th>PACIENTE</th>
-                            <th>GENERO</th>
+                            <th style="text-align:center">Código</th>
+                            <th>Paciente</th>
+                            <th>Género</th>
                             <th>DPI</th>
-                            <th>FECHA DE NACIMIENTO</th>
+                            <th>Fecha de nacimiento</th>
                             <th>Acción</th>
                         </tr>
                     </thead>
@@ -98,17 +80,25 @@
                         {
                             <tr>
                                 <td style="text-align:center">@contador</td>
-                                <td>@c.IdPaciente</td>
+                                <td style="text-align:center">@c.IdPaciente</td>
                                 <td>@c.NombrePaciente</td>
                                 <td>@c.Sexo</td>
                                 <td>@c.DPI</td>
                                 <td>@c.FechaNacimiento.ToString("dd/MM/yyyy")</td>
                                 <td style="text-align:center">
                                     <div class="btn-group">
-                                        <a class="btn bg-info btn-xs" href="@Url.Action("EditarPaciente","ControlPaciente",new {  id=c.IdPaciente})"> Editar</a>
-                                        <a class="btn bg-success btn-xs" href="@Url.Action("EditarPaciente","ControlPaciente",new {  id=c.IdPaciente})"> Citas</a>
-                                        <a class="btn bg-danger btn-xs" href="@Url.Action("InactivarPaciente","ControlPaciente",new {  id=c.IdPaciente})"> Eliminar</a>
-                                        <a class="btn btn-default btn-xs" href="@Url.Action("ShowAddAnexo", "ControlPaciente", new { id=c.IdPaciente})" > Agregar</a>
+                                        <a class="btn btn-outline-secondary btn-xs " href="@Url.Action("EditarPaciente","ControlPaciente",new {  id=c.IdPaciente})" data-toggle="tooltip" data-placement="top" title="Editar">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </a>
+                                        <a class="btn btn-outline-secondary btn-xs " href="@Url.Action("CrearCitas","CitasMedicas",new { id=c.IdPaciente})" data-toggle="tooltip" data-placement="top" title="Crear Cita">
+                                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                        </a>
+                                        <a class="btn btn-outline-secondary btn-xs " href="@Url.Action("InactivarPaciente","ControlPaciente",new {  id=c.IdPaciente})" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                        <a class="btn btn-outline-secondary btn-xs " href="@Url.Action("ShowAddAnexo", "ControlPaciente", new { id=c.IdPaciente})" data-toggle="tooltip" data-placement="top" title="Agregar">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -120,3 +110,67 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+            if ('@TempData["Error"]' == "Si") {
+                swal({
+                    title: "",
+                    text: "  @TempData["Mensaje"]",
+                    type: "error",
+                });
+            }
+
+            if ('@TempData["Confirm"]' == "Si") {
+                swal({
+                    title: "",
+                    text: '@TempData["Mensaje"]' + '\n' + '@TempData["MensajeAux"]',
+                    type: "success"
+                });
+            }
+
+            $('.dataTables-example').dataTable({
+                "pageLength": 5,
+                "lengthMenu": [[5, 10, 25, 50, 75, 100, -1], [5, 10, 25, 50, 75, 100, "Todas"]],
+                "scrollX": true,
+                "language": {
+                    "lengthMenu": "Desplegar _MENU_ líneas por página",
+                    "info": "Mostrando _PAGE_ de _PAGES_",
+                    "zeroRecords": "No hay alguna coincidencia",
+                    "infoFiltered": "(Filtrado de _MAX_ registros)",
+                    "infoEmpty": "No hay registros",
+                    "search": "Buscar:",
+                    "oPaginate": {
+                        "sPrevious": "Anterior",
+                        "sNext": "Siguiente"
+                  },
+                },
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    { extend: 'copy' },
+                    { extend: 'csv' },
+                    {
+                        extend: 'print',
+                        customize: function (win) {
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '8px');
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                        }
+                    },
+
+                ]
+
+            });
+
+        });
+
+    </script>
+
+}

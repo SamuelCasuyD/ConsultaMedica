@@ -1,0 +1,220 @@
+﻿@using Webmedicas.Models;
+@{
+    ViewBag.Title = "EditarCitaPciente";
+    var Detalle = (ViewBag.Detalle == null) ? new CitasDTO() : (CitasDTO)ViewBag.Detalle;
+    DateTime fechaActual = DateTime.Now;
+}
+
+<div style="font-family: 'Verdana';">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-white">
+            <li class="breadcrumb-item"><a href="@Url.Action("index", "Home" , new { area="" })">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Editar Citas</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card ">
+                    <div class="card-header" id="Notificacion">
+                        <strong>Cita</strong> - Fecha: @fechaActual.ToString("dd/MM/yyyy")
+                    </div>
+                    <div class="card-body">
+
+                        <form id="actualizardetalle">
+                            <div class="form-row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Paciente:</label>
+                                        <input type="text" class="form-control col" style="width:100%" name="NombrePaciente" id="NombrePaciente" value="@Detalle.NombrePaciente" />
+                                        <input type="hidden" class="form-control col" style="width:100%" name="IdPaciente" id="IdPaciente" value="@Detalle.IdPaciente" />
+                                        <input type="hidden" class="form-control col" style="width:100%" name="IdCita" id="IdCita" value="@Detalle.IdCita" />
+                                        <input type="hidden" class="form-control col" style="width:100%" name="IdMedico" id="IdMedico" value="@Detalle.IdMedico" />
+                                    </div>
+                                </div>
+                                @*<div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Medico:</label>
+                                            @if (ViewBag.Medicos != null)
+                                            {
+                                                <select class="form-control col" name="IdMedico" id="IdMedico">
+                                                    <option value="">--seleccione--</option>
+                                                    @foreach (MedicoDTO rm in ViewBag.Medicos)
+                                                    {
+                                                        <option value="@rm.IdMedico">@rm.NombreMedico</option>
+                                                    }
+                                                </select>
+                                            }
+                                        </div>
+                                    </div>*@
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Hora de Cita: </label>
+                                        <input type="time" class="form-control col" style="width:100%" name="HoraCita" id="HoraCita" value="@Detalle.HoraCita.ToString("hh:mm:ss")" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Fecha de Cita: </label>
+                                        <input type="date" class="form-control col" style="width:100%" name="FechaCita" id="FechaCita" value="@Detalle.FechaCita.ToString("yyyy-MM-dd")" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tipo de consulta: </label>
+                                        <select class="form-control col" name="IdConsulta" id="IdConsulta">
+                                            @if (Session["consulta"] != null)
+                                            {
+                                                var Position = (List<CitasDTO>)Session["consulta"];
+                                                foreach (CitasDTO cl in Position)
+                                                {
+                                                    if (Detalle.IdConsulta == cl.IdConsulta)
+                                                    {
+                                                        <option value="@cl.IdConsulta" selected>@cl.NombreConsulta</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@cl.IdConsulta">@cl.NombreConsulta</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Estado: </label>
+                                        <select class="form-control col" name="IdEstado" id="IdEstado">
+                                            @if (Session["Estados"] != null)
+                                            {
+                                                var Position = (List<CitasDTO>)Session["Estados"];
+                                                foreach (CitasDTO vnd in Position)
+                                                {
+                                                    if (Detalle.IdEstado == vnd.IdEstado)
+                                                    {
+                                                        <option value="@vnd.IdEstado" selected>@vnd.NombreEstado</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@vnd.IdEstado">@vnd.NombreEstado</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Hora Finalizacion: </label>
+                                        <input type="time" class="form-control col" style="width:100%" name="FechaFinalizacion" id="FechaFinalizacion" value="@Detalle.FechaFinalizacion.ToString("hh:mm:ss")" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Programar cita: </label>
+                                        <input type="date" class="form-control col" style="width:100%" name="FechaNuevaCita" id="FechaNuevaCita" value="@Detalle.FechaNuevaCita.ToString("yyyy-MM-dd")" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Comentario: </label>
+                                        <input type="text" class="form-control col" style="width:100%" name="Comentario" id="Comentario" value="@Detalle.Comentario" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 text-right">
+                                    <button class="btn btn-outline-info" type="submit" id="Crear" name="Crear" onclick="UpdateCita(event)">
+                                        <i class="fa fa-check fa-lg" aria-hidden="true"></i> Actualizar datos
+                                    </button>
+                                    <a class="btn btn-outline-secondary btn-xs" href="@Url.Action("ListCitasPorMedico","CitasMedicas",new {  id=Detalle.IdMedico})" data-toggle="tooltip" data-placement="top" title="Lista de Pacientes">
+                                        <i class="fa fa-tasks" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function mapearCamposJson(form) {
+
+        var result = {};
+
+        $.map($(form).serializeArray(),
+            function (el) {
+                mapFormProperty(result, el);
+            });
+        return result;
+    }
+
+    function mapFormProperty(form, property) {
+        form[property.name] = property.value;
+    }
+
+    function UpdateCita(evt) {
+
+        evt.preventDefault();
+
+        var NewObject = mapearCamposJson($('#actualizardetalle'));
+        console.info(NewObject);
+
+         $.ajax({
+            url: '@Url.Action("UpdateDetalleCita", "CitasMedicas", new { })',
+            data: { "act": JSON.stringify(NewObject) },
+            type: "POST",
+            dataType: "json",
+             success: function (result) {
+                 console.log(result);
+                 if (result.Success === true) {
+                     toastr.success(result.Message);
+                     window.location.reload();
+                 } else {
+                     $("#Notificacion").html("Registro Actualizado");
+                     $("#Notificacion").css('background-color', '#1675d1');
+                     //toastr.warning('Alerta:'+result.Message);
+                     //return RedirectToAction("ListPacientes", "ControlPaciente");
+                     url: '@Url.Action("ListMedicos", "ControlMedicos", new { })'
+                     return;
+                 }
+             },
+             //alerta cambio de color en la etiqueta class card
+             error: function (jqXHR, textStatus, error) {
+                 $("#Notificacion").html("No Actualizado");
+                 $("#Notificacion").css('background-color', '#FF4000');
+                 //alert("Lo sentimos ocurrio una excepcion");
+                //console.log(error + ":" + textStatus + ":" + jqXHR.responseText);
+            }
+         });
+
+        return;
+    }
+
+    $(document).ready(function () {
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            if ('@TempData["Error"]' == "Si") {
+                swal({
+                    title: "",
+                    text: "  @TempData["Mensaje"]",
+                    type: "error",
+                });
+            }
+
+            if ('@TempData["Confirm"]' == "Si") {
+                swal({
+                    title: "",
+                    text: '@TempData["Mensaje"]' + '\n' + '@TempData["MensajeAux"]',
+                    type: "success"
+                });
+            }
+
+    });
+
+</script>

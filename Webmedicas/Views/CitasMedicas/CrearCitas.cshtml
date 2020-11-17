@@ -1,0 +1,123 @@
+﻿@using Webmedicas.Models;
+@using System;
+@{
+    ViewBag.Title = "CrearCitas";
+    var paciente = (ViewBag.Paciente == null) ? new PacienteDTO() : (PacienteDTO)ViewBag.Paciente;
+    DateTime fechaActual = DateTime.Now;
+}
+
+<div style="font-family: 'Verdana';">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-white">
+            <li class="breadcrumb-item"><a href="@Url.Action("index", "Home" , new { area="" })">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Crear Citas</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card ">
+                    <div class="card-header bg-light mb-3">
+                        <strong>Cita</strong> - Fecha: @fechaActual.ToString("dd/MM/yyyy")
+                    </div>
+                    <div class="card-body">
+                        <form action="@Url.Action("CrearCitas", "CitasMedicas")" method="post">
+                            <div class="form-row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Paciente:</label>
+                                        <input type="text" class="form-control col" style="width:100%" name="NombrePaciente" id="NombrePaciente" value="@paciente.NombrePaciente" />
+                                        <input type="hidden" class="form-control col" style="width:100%" name="IdPaciente"  id="IdPaciente" value="@paciente.IdPaciente" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Medico:</label>
+                                        @if (ViewBag.Medicos != null)
+                                        {
+                                            <select class="form-control col" name="IdMedico" id="IdMedico">
+                                                <option value="">--seleccione--</option>
+                                                @foreach (MedicoDTO rm in ViewBag.Medicos)
+                                                {
+                                                    <option value="@rm.IdMedico">@rm.NombreMedico</option>
+                                                }
+                                            </select>
+                                        }
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Hora de Cita: </label>
+                                        <input type="time" class="form-control col" style="width:100%" name="HoraCita" id="HoraCita" value="@paciente.HoraCita" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Fecha de Cita: </label>
+                                        <input type="date" class="form-control col" style="width:100%" name="FechaCita" id="FechaCita" value="@paciente.FechaCita" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tipo de consulta: </label>
+                                        @if (ViewBag.Consulta != null)
+                                        {
+                                            <select class="form-control col" name="IdConsulta" id="IdConsulta">
+                                                <option value="">--seleccione--</option>
+                                                @foreach (CitasDTO cl in ViewBag.Consulta)
+                                                {
+                                                    <option value="@cl.IdConsulta">@cl.NombreConsulta</option>
+                                                }
+                                            </select>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Estado: </label>
+                                        @if (ViewBag.Estado != null)
+                                        {
+                                            <select class="form-control col" name="IdEstado" id="IdEstado">
+                                                <option value="">--seleccione--</option>
+                                                @foreach (CitasDTO vnd in ViewBag.Estado)
+                                                {
+                                                    <option value="@vnd.IdEstado">@vnd.NombreEstado</option>
+                                                }
+                                            </select>
+                                        }
+                                    </div>
+                                </div>
+                                @*<div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Hora Finalizacion: </label>
+                                        <input type="time" class="form-control col" style="width:100%" name="FechaFinalizacion" id="FechaFinalizacion" value="@paciente.FechaFinalizacion" />
+                                    </div>
+                                </div>*@
+                                @*<div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Programar cita: </label>
+                                        <input type="date" class="form-control col" style="width:100%" name="FechaNuevaCita" id="FechaNuevaCita" value="@paciente.FechaNuevaCita" />
+                                    </div>
+                                </div>*@
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Comentario: </label>
+                                        <input type="text" class="form-control col" style="width:100%" name="Comentario" id="Comentario" value="@paciente.Comentario" />
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-12 text-right">
+                                    <button class="btn btn-outline-info" type="submit" id="Crear" name="Crear">
+                                        <i class="fa fa-check fa-lg" aria-hidden="true"></i> Crear
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

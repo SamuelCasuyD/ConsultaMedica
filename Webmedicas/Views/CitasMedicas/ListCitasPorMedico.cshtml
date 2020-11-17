@@ -1,0 +1,90 @@
+﻿@using Webmedicas.Models;
+@{
+    ViewBag.Title = "ListCitasPorMedico";
+    IList<CitasDTO> Medico = (IList<CitasDTO>)ViewBag.ListCita;
+    int contador = 1;
+}
+
+<div style="font-family: 'Verdana';">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-white">
+            <li class="breadcrumb-item"><a href="@Url.Action("index", "Home" , new { area="" })">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Pacientes</li>
+        </ol>
+    </nav>
+
+    <hr />
+    <div class="row" style="padding-top: 25px">
+        <div class="col-lg-12 table-responsive-sm">
+            <table class="table table-bordered table-hover table-striped table-sm ">
+                <thead style="font-size:14px">
+                    <tr class="btn-primary">
+                        <th style="text-align:center">#</th>
+                        <th style="text-align:center">Código</th>
+                        <th>Paciente</th>
+                        <th>Genero</th>
+                        <th style="text-align:center">Edad</th>
+                        <th>Tipo de Consulta</th>
+                        <th style="text-align:center">Fecha de Consulta</th>
+                        <th style="text-align:center">Consulta Finalizada</th>
+                        <th style="text-align:center">Nueva Cita</th>
+                        <th style="text-align:center">Estado</th>
+                        <th style="text-align:center">Accion</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size:13px">
+                    @foreach (var c in Medico)
+                    {
+                        <tr>
+                            <td style="text-align:center">@contador</td>
+                            <td>@c.IdCita</td>
+                            <td>@c.NombrePaciente</td>
+                            <td>@c.Sexo</td>
+                            <td style="text-align:center">@c.Edad</td>
+                            <td>@c.NombreConsulta</td>
+                            <td style="text-align:center">
+                                @if (c.FechaCita == DateTime.MinValue)
+                                { }
+                                else
+                                {
+                                    @c.FechaCita.ToString("dd/MM/yyyy")
+                                }
+                            </td>
+                            <td style="text-align:center">
+                                @if (c.FechaFinalizacion == DateTime.MinValue)
+                                { }
+                                else
+                                {
+                                    @c.FechaFinalizacion.ToString("hh:mm:ss tt")
+                                }
+                            </td>
+                            <td style="text-align:center">
+                                @if (c.FechaNuevaCita == DateTime.MinValue)
+                                { }
+                                else
+                                {
+                                    @c.FechaNuevaCita.ToString("dd/MM/yyyy")
+                                }
+                            </td>
+                            <td style="text-align:center">@c.NombreEstado</td>
+                            <td style="text-align:center">
+                                    <div class="btn-group">
+                                        <a class="btn btn-outline-secondary btn-xs" href="@Url.Action("EditarCitaPciente","CitasMedicas",new {  id=c.IdCita})" data-toggle="tooltip" data-placement="top" title="Editar">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </a>
+                                        @*<a class="btn btn-outline-secondary btn-xs" href="@Url.Action("ListarCitasPorMedico","CitasMedicas",new {  id=c.IdMedico})"> Citas</a>
+                                        <a class="btn btn-outline-secondary btn-xs" href="@Url.Action("InactivarMedico","ControlMedicos",new {  id=c.IdMedico})" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>*@
+                                    </div>
+                                </td>
+                        </tr>
+                        contador++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

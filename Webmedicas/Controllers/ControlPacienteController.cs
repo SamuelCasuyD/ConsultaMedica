@@ -61,8 +61,10 @@ namespace Webmedicas.Controllers
 
             ControlPaciente.NombrePaciente = frm["NombrePaciente"];
             ControlPaciente.FechaNacimiento = DateTime.Parse(frm["FechaNacimiento"]);
+            ControlPaciente.FechaCreacion = DateTime.Now;
             ControlPaciente.Sexo = frm["Sexo"];
             ControlPaciente.DPI = frm["DPI"];
+            ControlPaciente.Eliminado = false;
             Session["DataPaciente"] = ControlPaciente;
 
             if (Request.Form["Crear"] != null)
@@ -94,8 +96,8 @@ namespace Webmedicas.Controllers
                     {
                         TempData["Error"] = "Si";
                         TempData["Mensaje"] = respuesta.Mensaje;
+                        return Redirect(Request.UrlReferrer.ToString());
                     }
-                    return RedirectToAction("ListPacientes", "ControlPaciente");
                 }
             }
             return View();
@@ -109,24 +111,17 @@ namespace Webmedicas.Controllers
         [HttpGet]
         public ActionResult EditarPaciente(string id)
         {
-            try
+            using (var client = new HttpClient())
             {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:62699/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.BaseAddress = new Uri("http://localhost:62699/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var Paciente = client
-                       .GetAsync("api/PacientesAPI/PacientesporID/" + id + "/")
-                       .Result
-                       .Content.ReadAsAsync<Models.PacienteDTO>().Result;
-                    ViewBag.Paciente = Paciente;
-                }
-            }
-            catch (Exception ex)
-            {
-                string mensaje = ex.Message;
+                var Paciente = client
+                   .GetAsync("api/PacientesAPI/PacientesporID/" + id + "/")
+                   .Result
+                   .Content.ReadAsAsync<Models.PacienteDTO>().Result;
+                ViewBag.Paciente = Paciente;
             }
             return View();
         }
@@ -142,31 +137,36 @@ namespace Webmedicas.Controllers
             var NewObject = JsonConvert.DeserializeObject<Models.PacienteDTO>(act);
             var Respuesta = new Models.RespuestaDTO();
 
-            try
+            using (var client = new HttpClient())
             {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:62699/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.BaseAddress = new Uri("http://localhost:62699/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    try
-                    {
-                        Respuesta = client.PostAsJsonAsync("api/PacientesAPI/UpdatePaciente", NewObject)
-                              .Result
-                              .Content.ReadAsAsync<Models.RespuestaDTO>().Result;
-                    }
-                    catch (Exception ex)
-                    {
-                        Respuesta.Mensaje += ex.Message.ToString();
-                    }
+                try
+                {
+                    Respuesta = client.PostAsJsonAsync("api/PacientesAPI/UpdatePaciente", NewObject)
+                          .Result
+                          .Content.ReadAsAsync<Models.RespuestaDTO>().Result;
+                }
+                catch (Exception ex)
+                {
+                    Respuesta.Mensaje += ex.Message.ToString();
+                }
+                if (Respuesta.Resultado)
+                {
+                    Session.Remove("DataPaciente");
+                    TempData["Confirm"] = "Si";
+                    TempData["Mensaje"] = Respuesta.Mensaje;
+                    return Json(Respuesta, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    TempData["Error"] = "Si";
+                    TempData["Mensaje"] = Respuesta.Mensaje;
+                    return Json(Respuesta, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch (Exception ex)
-            {
-                Respuesta.Mensaje = ex.Message;
-            }
-            return Json(Respuesta, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -176,35 +176,39 @@ namespace Webmedicas.Controllers
         /// <returns></returns>
         public ActionResult InactivarPaciente(string id)
         {
-            try
+            var respuesta = new Models.RespuestaDTO();
+            var paciente = new Models.PacienteDTO();
+            paciente.IdPaciente = int.Parse(id);
+
+            using (var client = new HttpClient())
             {
-                var respuesta = new Models.RespuestaDTO();
-                var paciente = new Models.PacienteDTO();
-                paciente.IdPaciente = int.Parse(id);
+                client.BaseAddress = new Uri("http://localhost:62699/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                using (var client = new HttpClient())
+                try
                 {
-                    client.BaseAddress = new Uri("http://localhost:62699/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    try
-                    {
-                        respuesta = client.PostAsJsonAsync("api/PacientesAPI/InactivarPaciente", paciente)
-                              .Result
-                              .Content.ReadAsAsync<Models.RespuestaDTO>().Result;
-                    }
-                    catch (Exception ex)
-                    {
-                        respuesta.Mensaje += ex.Message.ToString();
-                    }
+                    respuesta = client.PostAsJsonAsync("api/PacientesAPI/InactivarPaciente", paciente)
+                          .Result
+                          .Content.ReadAsAsync<Models.RespuestaDTO>().Result;
+                }
+                catch (Exception ex)
+                {
+                    respuesta.Mensaje += ex.Message.ToString();
+                }
+                if (respuesta.Resultado)
+                {
+                    TempData["Confirm"] = "Si";
+                    TempData["Mensaje"] = respuesta.Mensaje;
+                    return RedirectToAction("ListPacientes", "ControlPaciente");
+                }
+                else
+                {
+                    TempData["Error"] = "Si";
+                    TempData["Mensaje"] = respuesta.Mensaje;
+                    return Redirect(Request.UrlReferrer.ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                string mensaje = ex.Message;
-            }
-            return RedirectToAction("ListPacientes", "ControlPaciente");
         }
 
         public ActionResult ShowAddAnexo(int id)

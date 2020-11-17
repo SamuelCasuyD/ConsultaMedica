@@ -1,27 +1,29 @@
-﻿
-@using Webmedicas.Models;
+﻿@using Webmedicas.Models;
 @{
     ViewBag.Title = "ShowAddAnexo";
     int contador = 1;
     IList<AnexoDTO> Anexos = (IList<AnexoDTO>)ViewBag.Anexos;
-
 }
 
-<div class="col-lg-12">
+<div style="font-family: 'Verdana';">
     @using (Html.BeginForm("AgregarAnexo", "ControlPaciente", new { Area = "" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div style="margin-top:15px; " class="fileinput fileinput-new" data-provides="fileinput">
-            <span class="btn btn-white btn-sm btn-file" style="width:100%">
-                <span class="fileinput-new">
-                    <i class="glyphicon glyphicon-paperclip" style="padding:15px" data-toggle="tooltip" data-placement="top" title="Adjuntar archivo"></i>
-                    ADJUNTAR ARCHIVO
-                </span>
-                <input type="file" class="custom-file-input" style="width:100%; padding-top:25px"  name="fileatached" id="fileatached">
+            @* <span class="btn btn-sm btn-file" style="width:50%">
+                    <span class="fileinput-new">
+                        <i class="fa fa-upload" style="padding:15px" data-toggle="tooltip" data-placement="top" title="Adjuntar archivo">
+                            ADJUNTAR ARCHIVO
+                        </i>
+                    </span>
+                </span>*@
+            <span class="btn btn-info btn-sm btn-file">
+                <i class="fa fa-upload" style="padding:15px" data-toggle="tooltip" data-placement="top" title="Adjuntar archivo">
+                </i>
+                ADJUNTAR ARCHIVO
+                <input type="file" class="form-control custom-file-input" style="width:100%; padding-top:25px" name="fileatached" id="fileatached" placeholder="adjuntar">
                 <input type="hidden" name="IdPaciente" style="width:100%" value="@ViewBag.IdPaciente" />
-
             </span>
             <span class="fileinput-filename"></span>
-            @*<a id="deletefileinputexists" href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>*@
         </div>
         <br />
         <div>
@@ -34,7 +36,6 @@
 
 <hr class="dashed">
 
-
 <div class="col-lg-12" style="padding-top:25px">
     <div class="ibox float-e-margins tooltip-demo">
         <table class="table table-striped table-hover table-bordered small">
@@ -46,7 +47,7 @@
                     <th>GENERO</th>
                     <th>DPI</th>
                     <th>FECHA DE NACIMIENTO</th>
-                    <th>Acción</th>
+                    @*<th>Acción</th>*@
                 </tr>
             </thead>
             <tbody>
@@ -59,8 +60,8 @@
                         <td>@c.Extencion</td>
                         <td>@c.NombreArchivo</td>
                         <td>@c.FechaCreacion.ToString("dd/MM/yyyy")</td>
-                        <td style="text-align:center">
-                        </td>
+                        @*<td style="text-align:center">
+                        </td>*@
                     </tr>
                     contador++;
                 }
@@ -70,7 +71,7 @@
 </div>
 
 
-<script>
+<script type="text/javascript">
 
     $('#fileatached').on('change', function () {
         var x = document.getElementById('btnAddfile');
